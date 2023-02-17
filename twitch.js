@@ -6,6 +6,7 @@
 // @version     1.0
 // @author      antipatico
 // @homepageURL https://github.com/antipatico/monkeyscripts
+// @downloadURL https://raw.githubusercontent.com/antipatico/monkeyscripts/main/twitch.js
 // @description 1/13/2023, 12:26:45 AM
 // ==/UserScript==
 
