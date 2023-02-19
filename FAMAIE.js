@@ -4,12 +4,27 @@
 // @match       http://www.amaie-energia.it/IT/index.php?pag=riepilogo-vendite*
 // @match       http://amaie-energia.it/IT/index.php?pag=riepilogo-vendite*
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @author      antipatico
 // @homepageURL https://github.com/antipatico/monkeyscripts
 // @downloadURL https://raw.githubusercontent.com/antipatico/monkeyscripts/main/FAMAIE.js
 // @description 1/8/2023, 2:59:11 PM
 // ==/UserScript==
+
+function tableInvertItems() {
+  let tableBody = document.querySelector("table tbody");
+  let newRows = Array.prototype.slice.call(tableBody.querySelectorAll("tr"));
+  let outHtml = "";
+  newRows = [ newRows[0] ].concat(newRows.slice(1).reverse());
+  newRows.forEach((v, i) => {
+    outHtml += v.outerHTML;
+  });
+  tableBody.innerHTML = outHtml;
+  let dateCol = tableBody.firstChild.firstElementChild;
+  dateCol.onclick = tableInvertItems;
+  let direction = (dateCol.textContent.slice(-1) == "↓")? "↑" : "↓";
+  dateCol.textContent = dateCol.textContent.slice(0,-1) + direction;
+}
 
 
 (() => {
@@ -63,6 +78,13 @@
   // Add net total to the page output
   let totalNetString = totalNet.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2});
   table.insertAdjacentHTML("afterend", "<p align='center'><b>Totale Netto € : " + totalNetString + "</b></p>");
-  console.log();
+
+  // Add clicking on "Data" will revert order of items in table
+  let dateCol = table.firstChild.firstChild.firstElementChild;
+  dateCol.style.cursor = "pointer";
+  dateCol.style.color = "red";
+  dateCol.style.userSelect = "none";
+  dateCol.textContent += " ↓"; // ↑
+  dateCol.onclick = tableInvertItems;
 
 })();
